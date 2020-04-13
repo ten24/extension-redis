@@ -278,7 +278,11 @@ public abstract class AbstractRedisCache extends CacheSupport {
 
     protected Jedis jedisSilent() {
 	try {
-	    return jedis();
+        Jedis connection = jedis();
+        if (!connection.isConnected()) {
+            connection.connect();
+        }
+        return connection;
 	}
 	catch (Exception e) {
 	    throw new RuntimeException(e);
